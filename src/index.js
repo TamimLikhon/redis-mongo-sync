@@ -26,7 +26,7 @@ connectDB();
 // Schedule the task to run every hour
 // Cron syntax: Minute Hour Day Month DayOfWeek
 // '0 * * * *' = Every hour at minute 0
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('* * * * *', () => {
     console.log('Running scheduled sync job at ' + new Date().toISOString());
     syncData();
 });
