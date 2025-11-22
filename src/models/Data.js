@@ -1,19 +1,12 @@
 const mongoose = require('mongoose');
 
-const DataSchema = new mongoose.Schema({
-    key: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    value: {
-        type: mongoose.Schema.Types.Mixed,
-        required: true
-    },
-    syncedAt: {
-        type: Date,
-        default: Date.now
-    }
+// Use strict: false to allow any fields from the JSON data
+// This matches the Analytics schema from the main application
+const AnalyticsSchema = new mongoose.Schema({}, {
+    strict: false,
+    timestamps: true
 });
 
-module.exports = mongoose.model('Data', DataSchema);
+// Force collection name to 'analytics' (3rd parameter)
+module.exports = mongoose.model('Analytics', AnalyticsSchema, 'analytics');
+

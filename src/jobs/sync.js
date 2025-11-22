@@ -14,19 +14,37 @@ const syncData = async () => {
         // We explicitly cast key to string to avoid "arguments[1]" type errors if key is somehow not a string.
         for await (const key of redisClient.scanIterator({ MATCH: pattern, COUNT: 100 })) {
             console.log(`Found key: ${key}`);
-            // console.log(`Found key: ${key}`); 
             try {
                 const value = await redisClient.get(String(key));
 
                 if (value) {
-                    // Update or Insert into MongoDB
+                    // Parse the JSON value
+                    const data = JSON.parse(value);
+
+                    // Extract shortCode from key pattern "user:shortcode"
+                    const shortCode = key.split(':')[1];
+
+                    if (!shortCode) {
+                        console.warn(`Skipping key ${key} - could not extract shortCode`);
+                        continue;
+                    }
+
+                    // Merge shortCode and lastSyncedAt into the data
+                    const updateData = {
+                        ...data,
+                        shortCode: shortCode,
+                        lastSyncedAt: new Date()
+                    };
+
+                    // Update or Insert into MongoDB using shortCode as the unique key
                     await Data.findOneAndUpdate(
-                        { key: key },
-                        { value: JSON.parse(value), syncedAt: new Date() },
+                        { shortCode: shortCode },
+                        { $set: updateData },
                         { upsert: true, new: true }
                     );
 
                     totalSynced++;
+                    console.log(`✅ Synced ${shortCode} successfully`);
                 }
             } catch (innerError) {
                 console.error(`Failed to process key ${key}:`, innerError);
