@@ -8,8 +8,9 @@ const redisClient = redis.createClient({
 redisClient.on('error', (err) => console.log('Redis Client Error', err));
 redisClient.on('connect', () => console.log('Redis Client Connected'));
 
-(async () => {
-    await redisClient.connect();
-})();
+// Auto-connect removed to allow better control in entry points
+// (async () => {
+//     await redisClient.connect();
+// })();
 
 module.exports = redisClient;
