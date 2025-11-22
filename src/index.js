@@ -27,12 +27,12 @@ connectDB();
 // Cron syntax: Minute Hour Day Month DayOfWeek
 // '0 * * * *' = Every hour at minute 0
 //0 0 * * * - 12 AM 
-cron.schedule('0 0 * * *', () => {
+cron.schedule('* * * * *', () => {
     console.log('Running scheduled sync job at ' + new Date().toISOString());
     syncData();
 });
 
-console.log('Cron job scheduler started. Waiting for Tomorrow...');
+console.log('Cron job scheduler started. Waiting for next minutes...');
 
 // For testing purposes, you can uncomment the line below to run immediately on startup
 // syncData();
