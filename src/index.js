@@ -27,7 +27,7 @@ connectDB();
 // Cron syntax: Minute Hour Day Month DayOfWeek
 // '0 * * * *' = Every hour at minute 0
 //0 0 * * * - 12 AM 
-cron.schedule('0 /5 * * *', () => {
+cron.schedule('0 /10 * * *', () => {
     console.log('Running scheduled sync job at ' + new Date().toISOString());
     syncData();
 });
